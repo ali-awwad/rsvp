@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('location')->nullable();
             $table->text('description')->nullable();
+            $table->datetime('publish_date')->nullable();
             $table->datetime('start_date')->nullable();
             $table->datetime('end_date')->nullable();
             $table->string('parking')->nullable();

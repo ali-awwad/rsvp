@@ -8,9 +8,9 @@ use Filament\Support\Contracts\HasLabel;
 
 enum Reply: string implements HasLabel, HasColor, HasIcon
 {
-    case NOT_GOING = 'not_going';
     case GOING = 'going';
     case MAYBE = 'maybe';
+    case NOT_GOING = 'not_going';
 
     public function getLabel(): string
     {

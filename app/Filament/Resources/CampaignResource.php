@@ -34,20 +34,21 @@ class CampaignResource extends Resource
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('title')
-                            ->label('Title')
                             // ->columnSpanFull()
                             ->required(),
                         // get status from enum
                         Forms\Components\Select::make('status')
                             ->options(Status::class)
                             ->required(),
+                        Forms\Components\DateTimePicker::make('publish_date')
+                            ->afterOrEqual('now')
+                            ->columns(1)
+                            ->required(),
                         Forms\Components\DateTimePicker::make('start_date')
-                            ->label('Start Date')
                             ->afterOrEqual('now')
                             ->columns(1)
                             ->required(),
                         Forms\Components\DateTimePicker::make('end_date')
-                            ->label('End Date')
                             ->after('start_date')
                             ->columns(1)
                             ->required(),
@@ -58,8 +59,7 @@ class CampaignResource extends Resource
                     ->collapsed()
                     ->collapsible()
                     ->schema([
-                        Forms\Components\TextInput::make('location')
-                            ->label('Location'),
+                        Forms\Components\TextInput::make('location'),
                         Forms\Components\TextInput::make('parking'),
                         Forms\Components\TextInput::make('parking_link')
                             ->placeholder('https://'),
@@ -74,6 +74,11 @@ class CampaignResource extends Resource
     {
         return $table
             ->columns([
+                // link to campaign using uuid as icon eye withot text
+                Tables\Columns\TextColumn::make('id')
+                    ->icon('heroicon-o-eye')
+
+                    ->url(fn (Campaign $record) => route('campaigns.show', $record)),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
@@ -84,6 +89,10 @@ class CampaignResource extends Resource
                     ->label('Contacts')
                     ->counts('contacts')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('publish_date')
+                    ->dateTime('Y-m-d H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('start_date')
                     ->dateTime('Y-m-d H:i')
                     ->sortable()
@@ -136,12 +145,11 @@ class CampaignResource extends Resource
                     )
                     ->form([
                         Forms\Components\Radio::make('status')
-                            ->label('Status')
                             ->options([
                                 Status::DRAFT->value => 'Draft',
                                 // Status::SCHEDULED->value => 'Scheduled',
                                 Status::PUBLISHED->value => 'Published',
-                                Status::COMPLETED->value => 'Completed',
+                                // Status::COMPLETED->value => 'Completed',
                                 Status::CANCELLED->value => 'Cancelled',
 
                             ])

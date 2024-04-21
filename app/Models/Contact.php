@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\ContactHelper;
 use App\Traits\Uuidable;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -19,6 +20,7 @@ class Contact extends Model implements HasName
         'company',
         'email',
         'mobile',
+        'country_code',
     ];
 
     public function getFilamentName(): string
@@ -37,23 +39,24 @@ class Contact extends Model implements HasName
     }
 
     /**
-     * Mutator for mobile to be with country code, remove spaces and leading zeros
+     * Mutator for mobile, remove spaces and leading zeros
      */
     public function mobile(): Attribute
     {
         return Attribute::make(
-            set: function ($value) {
-                // remove leading zeros
-                $value = ltrim($value, '0');
-                // remove all non-numeric characters
-                $value = preg_replace('/\D/', '', $value);
-                return $value;
-            }
+            set: fn ($value) => ContactHelper::correctMobile($value),
+        );
+    }
+
+    public function internationalMobile(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->country_code . $this->mobile,
         );
     }
 
     public function campaigns(): BelongsToMany
     {
-        return $this->belongsToMany(Campaign::class);
+        return $this->belongsToMany(Campaign::class)->using(CampaignContact::class)->withPivot(['reply', 'notes']);
     }
 }

@@ -29,7 +29,18 @@ class CampaignsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('title')
             ->columns([
-                Tables\Columns\TextColumn::make('title'),
+                Tables\Columns\TextColumn::make('title')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('notes')
+                    ->searchable()
+                    ->sortable(),
+                    Tables\Columns\IconColumn::make('reply')
+                    ->searchable()
+                    ->sortable(),
+                    Tables\Columns\TextColumn::make('visited_at')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //

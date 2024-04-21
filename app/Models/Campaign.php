@@ -18,6 +18,7 @@ class Campaign extends Model
         'status',
         'location',
         'description',
+        'publish_date',
         'start_date',
         'end_date',
         'parking',
@@ -25,6 +26,7 @@ class Campaign extends Model
     ];
 
     protected $casts = [
+        'publish_date' => 'datetime',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'status'=> Status::class,
@@ -32,6 +34,6 @@ class Campaign extends Model
 
     public function contacts(): BelongsToMany
     {
-        return $this->belongsToMany(Contact::class);
+        return $this->belongsToMany(Contact::class)->using(CampaignContact::class)->withPivot(['reply', 'notes']);
     }
 }

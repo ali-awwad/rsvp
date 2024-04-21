@@ -9,18 +9,18 @@ use Filament\Support\Contracts\HasLabel;
 enum Status: string implements HasLabel, HasColor, HasIcon
 {
     case DRAFT = 'draft';
-    case SCHEDULED = 'scheduled';
+    // case SCHEDULED = 'scheduled';
     case PUBLISHED = 'published';
-    case COMPLETED = 'completed';
+    // case COMPLETED = 'completed';
     case CANCELLED = 'cancelled';
 
     public function getLabel(): string
     {
         return match ($this) {
             self::DRAFT => 'Draft',
-            self::SCHEDULED => 'Scheduled',
+            // self::SCHEDULED => 'Scheduled',
             self::PUBLISHED => 'Published',
-            self::COMPLETED => 'Completed',
+            // self::COMPLETED => 'Completed',
             self::CANCELLED => 'Cancelled',
         };
     }
@@ -29,9 +29,9 @@ enum Status: string implements HasLabel, HasColor, HasIcon
     {
         return match ($this) {
             self::DRAFT => 'gray',
-            self::SCHEDULED => 'warning',
+            // self::SCHEDULED => 'warning',
             self::PUBLISHED => 'success',
-            self::COMPLETED => 'info',
+            // self::COMPLETED => 'info',
             self::CANCELLED => 'danger',
         };
     }
@@ -40,9 +40,9 @@ enum Status: string implements HasLabel, HasColor, HasIcon
     {
         return match ($this) {
             self::DRAFT => 'heroicon-o-pencil-square',
-            self::SCHEDULED => 'heroicon-o-clock',
+            // self::SCHEDULED => 'heroicon-o-clock',
             self::PUBLISHED => 'heroicon-o-check-circle',
-            self::COMPLETED => 'heroicon-o-archive-box',
+            // self::COMPLETED => 'heroicon-o-archive-box',
             self::CANCELLED => 'heroicon-o-x-circle',
         };
     }

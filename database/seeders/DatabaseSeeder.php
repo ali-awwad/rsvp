@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'a.awwad@outlook.com',
             'role' => Role::ADMIN->value,
         ]);
-        User::factory(10)->create();
+        User::factory(2)->create();
 
-        $campaigns = \App\Models\Campaign::factory(100)->create();
-        \App\Models\Contact::factory(20)->create();
+        $campaigns = \App\Models\Campaign::factory(2)->create();
+        \App\Models\Contact::factory(2)->create();
 
         foreach ($campaigns as $campaign) {
             $contacts = \App\Models\Contact::inRandomOrder()->take(rand(5, 10))->pluck('id');

@@ -33,6 +33,8 @@ class ContactsRelationManager extends RelationManager
                 Forms\Components\TextInput::make('mobile')
                     ->label('Mobile')
                     ->required(),
+                Forms\Components\TextInput::make('notes')
+                    ->required(),
             ]);
     }
 
@@ -56,6 +58,16 @@ class ContactsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('mobile')
                     ->searchable()
                     ->sortable(),
+                // Tables\Columns\TextColumn::make('notes')
+                //     ->searchable()
+                //     ->sortable(),
+                Tables\Columns\IconColumn::make('reply')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('visited_at')
+                    ->searchable()
+                    ->sortable(),
+
             ])
             ->filters([
                 //
