@@ -2,14 +2,19 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ImageMimeTypes;
 use App\Enums\Status;
 use App\Filament\Resources\CampaignResource\Pages;
 use App\Filament\Resources\CampaignResource\RelationManagers;
 use App\Models\Campaign;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Wizard;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -23,49 +28,26 @@ class CampaignResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return Campaign::where('end_date','>=',now())->count();
+        return Campaign::where('end_date', '>=', now())->count();
     }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Campaign Information')
-                    ->columns(2)
-                    ->schema([
-                        Forms\Components\TextInput::make('title')
-                            // ->columnSpanFull()
-                            ->required(),
-                        // get status from enum
-                        Forms\Components\Select::make('status')
-                            ->options(Status::class)
-                            ->required(),
-                        Forms\Components\DateTimePicker::make('publish_date')
-                            ->afterOrEqual('now')
-                            ->columns(1)
-                            ->required(),
-                        Forms\Components\DateTimePicker::make('start_date')
-                            ->afterOrEqual('now')
-                            ->columns(1)
-                            ->required(),
-                        Forms\Components\DateTimePicker::make('end_date')
-                            ->after('start_date')
-                            ->columns(1)
-                            ->required(),
-                    ]),
 
-                Forms\Components\Section::make('Additional Information')
+                    Section::make('Campaign Information')
+                    ->columns(6)
+                        ->schema(self::campaignInformationSchema()),
+
+                    Section::make('Additional Information')
                     ->columns(3)
-                    ->collapsed()
-                    ->collapsible()
-                    ->schema([
-                        Forms\Components\TextInput::make('location'),
-                        Forms\Components\TextInput::make('parking'),
-                        Forms\Components\TextInput::make('parking_link')
-                            ->placeholder('https://'),
-                        Forms\Components\RichEditor::make('description')
-                            ->columnSpanFull(),
-                    ]),
+
+                        ->schema(self::additionalInformationSchema()),
+                    Section::make('Media')
+                    ->columns(2)
+                        ->schema(self::mediaSchema()),
+
 
             ]);
     }
@@ -74,6 +56,9 @@ class CampaignResource extends Resource
     {
         return $table
             ->columns([
+                SpatieMediaLibraryImageColumn::make('logo')
+                    ->collection('logo')
+                    ->conversion('thumb'),
                 // link to campaign using uuid as icon eye withot text
                 Tables\Columns\TextColumn::make('id')
                     ->icon('heroicon-o-eye')
@@ -179,6 +164,73 @@ class CampaignResource extends Resource
             'index' => Pages\ListCampaigns::route('/'),
             'create' => Pages\CreateCampaign::route('/create'),
             'edit' => Pages\EditCampaign::route('/{record}/edit'),
+        ];
+    }
+
+    protected static function campaignInformationSchema(): array
+    {
+        return [
+            Forms\Components\TextInput::make('title')
+                ->columnSpan(3)
+                ->required(),
+            Forms\Components\Radio::make('status')
+                ->options(Status::class)
+                ->columns(3)
+                ->default(Status::DRAFT)
+                ->columnSpan(3)
+                ->required(),
+            Forms\Components\DateTimePicker::make('publish_date')
+                ->afterOrEqual(fn (?Campaign $campaign) => $campaign->exists ? '' : 'now')
+                ->columnSpan(2)
+                ->required(),
+            Forms\Components\DateTimePicker::make('start_date')
+                ->afterOrEqual(fn (?Campaign $campaign) => $campaign->exists ? '' : 'now')
+                ->columnSpan(2)
+                ->required(),
+            Forms\Components\DateTimePicker::make('end_date')
+                ->rule('after_or_equal:start_date')
+                ->afterOrEqual(fn (?Campaign $campaign) => $campaign->exists ? '' : 'start_date')
+                ->columnSpan(2)
+                ->required(),
+        ];
+    }
+
+    protected static function additionalInformationSchema(): array
+    {
+        return [
+            Forms\Components\TextInput::make('location'),
+            Forms\Components\TextInput::make('parking'),
+            Forms\Components\TextInput::make('parking_link')
+                ->placeholder('https://'),
+            Forms\Components\RichEditor::make('description')
+                ->columnSpanFull(),
+        ];
+    }
+
+    protected static function mediaSchema(): array
+    {
+        return [
+            SpatieMediaLibraryFileUpload::make('background')
+                ->collection('background')
+                ->conversion('thumb')
+                ->rules('image')
+                ->acceptedFileTypes(ImageMimeTypes::values()),
+
+            SpatieMediaLibraryFileUpload::make('Logo')
+                ->collection('logo')
+                ->conversion('thumb')
+                ->acceptedFileTypes(ImageMimeTypes::values())
+                ->rules('image'),
+
+            SpatieMediaLibraryFileUpload::make('Sponsors')
+                ->multiple()
+                ->acceptedFileTypes(ImageMimeTypes::values())
+                ->conversion('thumb')
+                ->panelLayout('grid')
+
+                ->collection('sponsors')
+                ->rules('image')
+                ->columnSpanFull(),
         ];
     }
 }

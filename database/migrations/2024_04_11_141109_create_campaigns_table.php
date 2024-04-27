@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('campaigns', function (Blueprint $table) {
-            $statuses = collect(Status::cases())->pluck('value')->toArray();
+            $statuses = Status::values();
             $table->id();
             $table->string('uuid')->unique();
             $table->enum('status', $statuses)->default($statuses[0]);

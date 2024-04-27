@@ -2,12 +2,15 @@
 
 namespace App\Enums;
 
+use App\Traits\Enumable;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 
 enum Reply: string implements HasLabel, HasColor, HasIcon
 {
+    use Enumable;
+
     case GOING = 'going';
     case MAYBE = 'maybe';
     case NOT_GOING = 'not_going';

@@ -14,7 +14,7 @@ return new class extends Migration
     {
 
         Schema::create('campaign_contact', function (Blueprint $table) {
-            $replies = collect(Reply::cases())->pluck('value')->toArray();
+            $replies = Reply::values();
 
             $table->foreignId('campaign_id')->constrained();
             $table->foreignId('contact_id')->constrained();

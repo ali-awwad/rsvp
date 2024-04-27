@@ -13,7 +13,7 @@ class CampaignFactory extends Factory
 {
     public function definition(): array
     {
-        $statuses = collect(Status::cases())->pluck('value')->toArray();
+        $statuses = Status::values();
         return [
             'title' => fake()->sentence(),
             'status'=>fake()->randomElement($statuses),

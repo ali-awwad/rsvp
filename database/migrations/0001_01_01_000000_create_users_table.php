@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $roles = collect(Role::cases())->pluck('value')->toArray();
+            $roles = Role::values();
             $table->id();
             $table->string('name');
             $table->string('email')->unique();

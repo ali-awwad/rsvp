@@ -2,12 +2,15 @@
 
 namespace App\Enums;
 
+use App\Traits\Enumable;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 
 enum Status: string implements HasLabel, HasColor, HasIcon
 {
+    use Enumable;
+
     case DRAFT = 'draft';
     // case SCHEDULED = 'scheduled';
     case PUBLISHED = 'published';
