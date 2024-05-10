@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class StoreContactToCampaign
 {
-    public static function execute(Campaign $campaign, array $data): void
+    public static function execute(Campaign $campaign, array $data): Contact
     {
         DB::beginTransaction();
         try {
@@ -29,6 +29,7 @@ class StoreContactToCampaign
                 ]
             ]);
             DB::commit();
+            return $contact;
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

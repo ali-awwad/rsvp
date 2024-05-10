@@ -8,6 +8,7 @@ use App\Traits\Uuidable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\Conversions\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -40,6 +41,11 @@ class Campaign extends Model implements HasMedia
     public function contacts(): BelongsToMany
     {
         return $this->belongsToMany(Contact::class)->using(CampaignContact::class)->withPivot(['reply', 'notes']);
+    }
+
+    public function webhooks(): HasMany
+    {
+        return $this->hasMany(Webhook::class);
     }
 
     public function registerMediaCollections(): void

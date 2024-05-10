@@ -36,17 +36,18 @@ class CampaignResource extends Resource
         return $form
             ->schema([
 
-                    Section::make('Campaign Information')
+                Section::make('Campaign Information')
                     ->columns(6)
-                        ->schema(self::campaignInformationSchema()),
+                    ->schema(self::campaignInformationSchema()),
 
-                    Section::make('Additional Information')
+                Section::make('Additional Information')
                     ->columns(3)
-
-                        ->schema(self::additionalInformationSchema()),
-                    Section::make('Media')
+                    ->collapsed()
+                    ->schema(self::additionalInformationSchema()),
+                Section::make('Media')
                     ->columns(2)
-                        ->schema(self::mediaSchema()),
+                    ->collapsed()
+                    ->schema(self::mediaSchema()),
 
 
             ]);
@@ -155,6 +156,8 @@ class CampaignResource extends Resource
     {
         return [
             RelationManagers\ContactsRelationManager::class,
+            RelationManagers\WebhooksRelationManager::class,
+
         ];
     }
 

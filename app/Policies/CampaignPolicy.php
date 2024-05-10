@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Enums\Role;
+use App\Enums\Status;
 use App\Models\Campaign;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -13,15 +15,35 @@ class CampaignPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true; // Todo
+        if ($user && in_array($user->role, [Role::ADMIN, Role::VIWER])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Campaign $campaign): bool
+    public function view(?User $user, Campaign $campaign): bool
     {
-        return true; // Todo
+        if ($user && in_array($user->role, [Role::ADMIN, Role::VIWER])) {
+            return true;
+        }
+
+        if ($campaign->status !== Status::PUBLISHED) {
+            return false;
+        }
+
+        if ($campaign->publish_date?->isFuture()) {
+            return false;
+        }
+
+        if ($campaign->end_date->isPast()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -29,7 +51,11 @@ class CampaignPolicy
      */
     public function create(User $user): bool
     {
-        return true; // Todo
+        if ($user->role === Role::ADMIN) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -37,7 +63,11 @@ class CampaignPolicy
      */
     public function update(User $user, Campaign $campaign): bool
     {
-        return true; // Todo
+        if ($user->role === Role::ADMIN) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -45,7 +75,11 @@ class CampaignPolicy
      */
     public function delete(User $user, Campaign $campaign): bool
     {
-        return true; // Todo
+        if ($user->role === Role::ADMIN) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -53,7 +87,11 @@ class CampaignPolicy
      */
     public function restore(User $user, Campaign $campaign): bool
     {
-        return true; // Todo
+        if ($user->role === Role::ADMIN) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -61,6 +99,10 @@ class CampaignPolicy
      */
     public function forceDelete(User $user, Campaign $campaign): bool
     {
-        return true; // Todo
+        if ($user->role === Role::ADMIN) {
+            return true;
+        }
+
+        return false;
     }
 }

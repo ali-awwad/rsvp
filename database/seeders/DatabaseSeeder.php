@@ -37,6 +37,22 @@ class DatabaseSeeder extends Seeder
                 ];
             });
             $campaign->contacts()->attach($contacts);
+
+            $campaign->addMediaFromUrl('https://source.unsplash.com/random/1920x1080')
+                ->toMediaCollection('background');
+            $campaign->addMediaFromUrl('https://source.unsplash.com/random/400x400')
+                ->toMediaCollection('logo');
+
+
+            for ($i=0; $i < rand(1, 5); $i++) {
+                $campaign->addMediaFromUrl('https://source.unsplash.com/random/200x200')
+                ->toMediaCollection('sponsors');
+            }
+
+            \App\Models\Webhook::factory(rand(1, 3))->create([
+                'campaign_id' => $campaign->id,
+            ]);
+
         }
     }
 }
