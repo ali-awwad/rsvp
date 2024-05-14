@@ -76,5 +76,12 @@ class Campaign extends Model implements HasMedia
             ->performOnCollections('background')
             // ->format(Manipulations::FORMAT_WEBP);
             ->keepOriginalImageFormat();
+
+        $this->addMediaConversion('medium')
+            ->performOnCollections('sponsors')
+            // ->format(Manipulations::FORMAT_WEBP);
+            ->width(800)
+            ->height(800);
+            //->keepOriginalImageFormat();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\HttpMethods;
+use App\Http\Resources\CampaignResource;
 use App\Models\Campaign;
 use App\Models\Contact;
 use App\Models\Webhook;
@@ -52,7 +53,8 @@ class ProcessCampaignWebhooksJob implements ShouldQueue
                 $client->withHeaders(json_decode($webhook->headers, true));
             }
             $payload = collect([
-                'campaign' => $this->campaign->withoutRelations()->toArray(),
+                // 'campaign' => $this->campaign->withoutRelations()->toArray(),
+                'campaign' => CampaignResource::make($this->campaign),
                 'contact' => $this->contact->toArray(),
                 'pivot' => $this->contact->campaigns()->find($this->campaign->id)->pivot->toArray(),
             ] );

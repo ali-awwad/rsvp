@@ -35,9 +35,15 @@ export default function Show() {
         <>
             <Head title={title} />
 
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden min-h-full">
+                {campaign.data.background &&
+                    <img
+                        src={campaign.data.background}
+                        className='absolute inset-0 w-full h-full object-cover opacity-10'
+                        alt={`${campaign.data.title} Background`} />
+                }
                 <div className="relative pt-6 pb-16">
-                    <main className="mt-10">
+                    <main className="mt-0 lg:mt-10">
                         <div className="mx-auto max-w-7xl">
                             <div className="lg:grid lg:grid-cols-12 lg:gap-8">
 
@@ -46,9 +52,6 @@ export default function Show() {
                                 <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6">
                                     <div className="bg-white sm:max-w-md sm:w-full sm:mx-auto sm:rounded-lg sm:overflow-hidden">
                                         <div className="px-4 py-8 sm:px-10">
-                                            <p className="text-sm font-medium text-gray-700">Please fill out the information below to register
-                                                for the event
-                                            </p>
                                             <Tabs replies={replies} setData={setData} data={data} />
                                             <div className="mt-6">
                                                 <form onSubmit={handleSubmit} method="POST" className="space-y-3">
