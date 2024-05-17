@@ -24,6 +24,9 @@ class CampaignFactory extends Factory
             'end_date' => Carbon::parse(fake()->dateTimeBetween('+7 days', '+10 days'))->startOfHour(),
             'parking' => fake()->sentence(),
             'parking_link' => fake()->url(),
+            'terms_link' => fake()->url(),
+            'data_policy_link' => fake()->url(),
+            'cookies_policy_link' => fake()->url(),
         ];
     }
 }

@@ -174,13 +174,18 @@ class CampaignResource extends Resource
     {
         return [
             Forms\Components\TextInput::make('title')
-                ->columnSpan(3)
+                ->columnSpan(2)
+                ->required(),
+            // id
+            Forms\Components\TextInput::make('uuid')
+                ->columnSpan(2)
+                ->disabled()
                 ->required(),
             Forms\Components\Radio::make('status')
                 ->options(Status::class)
                 ->columns(3)
                 ->default(Status::DRAFT)
-                ->columnSpan(3)
+                ->columnSpan(2)
                 ->required(),
             Forms\Components\DateTimePicker::make('publish_date')
                 ->afterOrEqual(fn (?Campaign $campaign) => $campaign->exists ? '' : 'now')
@@ -207,6 +212,12 @@ class CampaignResource extends Resource
                 ->placeholder('https://'),
             Forms\Components\RichEditor::make('description')
                 ->columnSpanFull(),
+            Forms\Components\TextInput::make('terms_link')
+                ->placeholder('https://'),
+            Forms\Components\TextInput::make('data_policy_link')
+                ->placeholder('https://'),
+            Forms\Components\TextInput::make('cookies_policy_link')
+                ->placeholder('https://'),
         ];
     }
 

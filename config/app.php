@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'default_country_code' => env('APP_DEFAULT_COUNTRY_CODE', 'AE'),
+
 ];

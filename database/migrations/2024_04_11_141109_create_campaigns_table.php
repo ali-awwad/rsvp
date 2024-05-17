@@ -25,6 +25,10 @@ return new class extends Migration
             $table->datetime('end_date')->nullable();
             $table->string('parking')->nullable();
             $table->string('parking_link')->nullable();
+            $table->string('terms_link')->nullable();
+            $table->string('data_policy_link')->nullable();
+            $table->string('cookies_policy_link')->nullable();
+
             $table->softDeletes();
             $table->timestamps();
         });
